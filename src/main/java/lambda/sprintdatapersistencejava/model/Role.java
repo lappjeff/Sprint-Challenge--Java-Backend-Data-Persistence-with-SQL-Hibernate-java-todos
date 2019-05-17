@@ -60,4 +60,10 @@ public class Role extends Auditable
 	{
 		this.userRoles = userRoles;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Role{" + "roleid=" + roleid + ", rolename='" + rolename + '\'' + ", userRoles=" + userRoles + '}';
+	}
 }

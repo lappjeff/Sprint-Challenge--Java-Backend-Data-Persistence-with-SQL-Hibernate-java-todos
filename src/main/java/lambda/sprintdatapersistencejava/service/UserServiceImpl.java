@@ -1,5 +1,6 @@
 package lambda.sprintdatapersistencejava.service;
 
+import lambda.sprintdatapersistencejava.model.Role;
 import lambda.sprintdatapersistencejava.model.ToDo;
 import lambda.sprintdatapersistencejava.model.UserRoles;
 import lambda.sprintdatapersistencejava.model.User;
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
 	}
 
-	@SuppressWarnings("Duplicates")
+	@Transactional
 	@Override
 	public User save(User user)
 	{
@@ -67,14 +68,17 @@ public class UserServiceImpl implements UserDetailsService, UserService
 		newUser.setUsername(user.getUsername());
 		newUser.setPassword(user.getPassword());
 
-		for(UserRoles ur : user.getUserRoles())
-		{
-			newUser.getUserRoles().add(new UserRoles(ur.getUser(), ur.getRole()));
-		}
+		ArrayList<UserRoles> newRoles = new ArrayList<>();
+
+
+		Role newRole = roleRepos.findByRolename("admin");
+		newRoles.add(new UserRoles(newUser, newRole));
+
+		newUser.setUserRoles(newRoles);
 
 		for(ToDo td: user.getTodos())
 		{
-			ToDo td1 = new ToDo(td.getDescription(), "Todoy", newUser);
+			ToDo td1 = new ToDo(td.getDescription(), td.getDateCreated(), newUser);
 			newUser.getTodos().add(td1);
 		}
 
