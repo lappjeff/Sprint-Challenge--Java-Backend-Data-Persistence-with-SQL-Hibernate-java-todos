@@ -1,5 +1,6 @@
 package javatodos.todos.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -7,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @Table(name = "users")
@@ -16,10 +18,14 @@ public class User extends Auditable
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long userid;
 
+	@Column(nullable = false,
+			unique = true)
 	private String username;
 
+	@Column(nullable = false)
 	private String password;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user",
 			   cascade = CascadeType.ALL,
 			   orphanRemoval = true,
@@ -27,9 +33,9 @@ public class User extends Auditable
 	@JsonIgnoreProperties("user")
 	private List<ToDo> todos = new ArrayList<>();
 
-	@OneToMany(mappedBy = "user",
-			   cascade = CascadeType.ALL,
-			   orphanRemoval = true)
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnoreProperties({"role", "user"})
 	private List<UserRoles> userRoles = new ArrayList<>();
 
 	public User()
@@ -38,9 +44,10 @@ public class User extends Auditable
 
 	public User(String username, String password, List<UserRoles> userRoles)
 	{
-		setUsername(username);
+		this.username = username;
 		setPassword(password);
-		for(UserRoles ur: userRoles)
+
+		for (UserRoles ur : userRoles)
 		{
 			ur.setUser(this);
 		}
@@ -78,16 +85,6 @@ public class User extends Auditable
 		this.password = passwordEncoder.encode(password);
 	}
 
-	public List<ToDo> getTodos()
-	{
-		return todos;
-	}
-
-	public void setTodos(List<ToDo> todos)
-	{
-		this.todos = todos;
-	}
-
 	public List<UserRoles> getUserRoles()
 	{
 		return userRoles;
@@ -98,13 +95,23 @@ public class User extends Auditable
 		this.userRoles = userRoles;
 	}
 
+	public List<ToDo> getTodos()
+	{
+		return todos;
+	}
+
+	public void setTodos(List<ToDo> todos)
+	{
+		this.todos = todos;
+	}
+
 	public List<SimpleGrantedAuthority> getAuthority()
 	{
 		List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
 
 		for (UserRoles r : this.userRoles)
 		{
-			String myRole = "ROLE_" + r.getRole().getRolename().toUpperCase();
+			String myRole = "ROLE_" + r.getRole().getName().toUpperCase();
 			rtnList.add(new SimpleGrantedAuthority(myRole));
 		}
 		return rtnList;

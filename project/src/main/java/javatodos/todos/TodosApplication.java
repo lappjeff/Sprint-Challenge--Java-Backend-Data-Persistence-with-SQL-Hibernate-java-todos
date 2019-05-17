@@ -1,9 +1,12 @@
 package javatodos.todos;
 
+import javatodos.todos.controllers.UserController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+@SpringBootApplication()
+
 public class TodosApplication
 {
 

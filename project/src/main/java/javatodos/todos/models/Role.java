@@ -1,5 +1,6 @@
 package javatodos.todos.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -14,21 +15,22 @@ public class Role extends Auditable
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long roleid;
 
-	@Column(nullable = false, unique = true)
-	private String rolename;
+	@Column(nullable = false,
+			unique = true)
+	private String name;
 
-	@OneToMany(mappedBy = "role",
-			   cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("role")
+	@JsonIgnore
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnoreProperties({"role", "user"})
 	private List<UserRoles> userRoles = new ArrayList<>();
 
 	public Role()
 	{
 	}
 
-	public Role(String rolename)
+	public Role(String name)
 	{
-		this.rolename = rolename;
+		this.name = name;
 	}
 
 	public long getRoleid()
@@ -41,14 +43,14 @@ public class Role extends Auditable
 		this.roleid = roleid;
 	}
 
-	public String getRolename()
+	public String getName()
 	{
-		return rolename;
+		return name;
 	}
 
-	public void setRolename(String rolename)
+	public void setName(String name)
 	{
-		this.rolename = rolename;
+		this.name = name;
 	}
 
 	public List<UserRoles> getUserRoles()

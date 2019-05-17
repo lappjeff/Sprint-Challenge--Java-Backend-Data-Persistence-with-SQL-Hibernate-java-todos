@@ -1,20 +1,45 @@
 package javatodos.todos.service;
 
 import javatodos.todos.models.User;
+import javatodos.todos.repo.RoleRepository;
+import javatodos.todos.repo.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService
 {
+
+	@Autowired
+	private UserRepository userRepos;
+	@Autowired
+	private RoleRepository roleRepos;
+
+	@Override
+	public User findUserByUsername(String username) throws UsernameNotFoundException
+	{
+		User user = userRepos.findByUsername(username);
+		if(user == null)
+		{
+			throw new UsernameNotFoundException("Invalid username or password");
+		}
+		return user;
+	}
+
 	@Override
 	public List<User> findAll()
 	{
-		return null;
+		ArrayList<User> users = new ArrayList<>();
+		userRepos.findAll().iterator().forEachRemaining(users::add);
+		return users;
 	}
 
 	@Override
@@ -42,8 +67,13 @@ public class UserServiceImpl implements UserDetailsService, UserService
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
 	{
-		return null;
+		User user = userRepos.findByUsername(username);
+		if (user == null)
+		{
+			throw new UsernameNotFoundException("Invalid username or password.");
+		}
+		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
 	}
 }
