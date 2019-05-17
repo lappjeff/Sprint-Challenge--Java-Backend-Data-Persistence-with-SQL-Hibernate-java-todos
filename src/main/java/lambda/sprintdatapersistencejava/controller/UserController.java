@@ -1,6 +1,7 @@
 package lambda.sprintdatapersistencejava.controller;
 
 //import lambda.sprintdatapersistencejava.service.UserAuditing;
+import lambda.sprintdatapersistencejava.model.ToDo;
 import lambda.sprintdatapersistencejava.model.User;
 import lambda.sprintdatapersistencejava.repository.UserRepository;
 import lambda.sprintdatapersistencejava.service.UserAuditing;
@@ -42,6 +43,15 @@ public class UserController
 											 User newUser)
 	{
 		userService.save(newUser);
+
+		return new ResponseEntity<>(null, HttpStatus.CREATED);
+	}
+
+	//localhost:2019/users/todo/{userid}
+	@PostMapping(value = "/todo/{username}", consumes = {"application/json"}, produces = {"application/json"})
+	public ResponseEntity<?> addTodoToUser(@Valid @RequestBody ToDo newTodo, @PathVariable String username)
+	{
+		userService.addTodoToUser(newTodo, username);
 
 		return new ResponseEntity<>(null, HttpStatus.CREATED);
 	}

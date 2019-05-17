@@ -92,14 +92,9 @@ public class UserServiceImpl implements UserDetailsService, UserService
 	}
 
 	@Override
-	public void addTodoToUser(ToDo todo, long userid) throws EntityNotFoundException
+	public void addTodoToUser(ToDo todo, String username) throws EntityNotFoundException
 	{
-		User currentUser = findUserById(userid);
-
-		if(currentUser == null)
-		{
-			throw new EntityNotFoundException("User with ID " + userid + " not found");
-		}
+		User currentUser = findUserByUsername(username);
 
 		currentUser.getTodos().add(new ToDo(todo.getDescription(), todo.getDateCreated(), currentUser));
 	}

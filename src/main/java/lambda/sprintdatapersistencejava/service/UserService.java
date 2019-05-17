@@ -14,7 +14,7 @@ public interface UserService
 
 	User findUserByUsername(String username);
 
-	void addTodoToUser(ToDo todo, long userid);
+	void addTodoToUser(ToDo todo, String username);
 
 	void delete(long id);
 
