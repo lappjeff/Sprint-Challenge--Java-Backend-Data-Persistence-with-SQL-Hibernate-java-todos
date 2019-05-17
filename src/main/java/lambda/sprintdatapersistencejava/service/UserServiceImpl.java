@@ -56,7 +56,14 @@ public class UserServiceImpl implements UserDetailsService, UserService
 	@Override
 	public void delete(long id)
 	{
-
+		if(userRepos.findById(id).isPresent())
+		{
+			userRepos.deleteUserRole(id);
+			userRepos.deleteById(id);
+		} else
+		{
+			throw new EntityNotFoundException(Long.toString(id));
+		}
 	}
 
 	@Transactional
@@ -66,7 +73,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
 		User newUser = new User();
 
 		newUser.setUsername(user.getUsername());
-		newUser.setPassword(user.getPassword());
+		newUser.setPlainTextPass(user.getPassword());
 
 		ArrayList<UserRoles> newRoles = new ArrayList<>();
 
@@ -83,12 +90,6 @@ public class UserServiceImpl implements UserDetailsService, UserService
 		}
 
 		return userRepos.save(newUser);
-	}
-
-	@Override
-	public User update(User user, long id)
-	{
-		return null;
 	}
 
 	@Override

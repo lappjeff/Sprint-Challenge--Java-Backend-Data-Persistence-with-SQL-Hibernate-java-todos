@@ -39,8 +39,7 @@ public class User extends Auditable
 	public User(String username, String password, List<UserRoles> userRoles)
 	{
 		setUsername(username);
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		setPassword(passwordEncoder.encode(password));
+		setPassword(password);
 
 		for(UserRoles ur : userRoles)
 		{
@@ -75,6 +74,12 @@ public class User extends Auditable
 	}
 
 	public void setPassword(String password)
+	{
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		this.password = passwordEncoder.encode(password);
+	}
+
+	public void setPlainTextPass(String password)
 	{
 		this.password = password;
 	}
@@ -113,5 +118,10 @@ public class User extends Auditable
 	}
 
 
-
+	@Override
+	public String toString()
+	{
+		return "User{" + "userid=" + userid + ", username='" + username + '\'' + ", password='" + password + '\'' + "," +
+				" userRoles=" + userRoles + ", todos=" + todos + '}';
+	}
 }

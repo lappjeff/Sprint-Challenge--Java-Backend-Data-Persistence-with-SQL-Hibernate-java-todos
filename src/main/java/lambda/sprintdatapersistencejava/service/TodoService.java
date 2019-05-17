@@ -9,11 +9,9 @@ public interface TodoService
 {
 	List<ToDo> findAll();
 
-	User findUserById(long id);
+	ToDo findTodoById(long id);
 
-	void delete(long id);
+	ToDo save(ToDo todo	);
 
-	User save(ToDo todo	);
-
-	User update(ToDo user, long id);
+	ToDo update(ToDo todo, long id);
 }
