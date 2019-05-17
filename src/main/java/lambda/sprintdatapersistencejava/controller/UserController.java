@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
@@ -24,9 +25,9 @@ public class UserController
 	//localhost:2019/users/current
 	@GetMapping(value = "/current",
 				produces = {"application/json"})
-	public ResponseEntity<?> getCurrentUser(Authentication authentication)
+	public ResponseEntity<?> getCurrentUser(Principal principal)
 	{
-		return new ResponseEntity<>((authentication.getPrincipal()), HttpStatus.OK);
+		return new ResponseEntity<>(userService.getCurrentUser(principal), HttpStatus.OK);
 	}
 
 	//localhost:2019/users/viewall

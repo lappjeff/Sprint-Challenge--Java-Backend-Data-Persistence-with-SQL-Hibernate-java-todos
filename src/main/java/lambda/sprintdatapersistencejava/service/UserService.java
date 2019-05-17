@@ -4,6 +4,7 @@ import lambda.sprintdatapersistencejava.model.ToDo;
 import lambda.sprintdatapersistencejava.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService
@@ -20,5 +21,6 @@ public interface UserService
 
 	User save(User user);
 
+	User getCurrentUser(Principal principal);
 //	User update(User user, long id);
 }

@@ -61,7 +61,6 @@ public class TodoServiceImpl implements TodoService
 		if(todo.getUser() != null)
 		{
 			User newUser = userService.findUserByUsername(todo.getUser().getUsername());
-			System.out.println("\n" + newUser + "\n");
 			currentTodo.setUser(newUser);
 		}
 

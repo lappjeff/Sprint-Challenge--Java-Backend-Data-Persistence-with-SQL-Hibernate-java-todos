@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,5 +112,11 @@ public class UserServiceImpl implements UserDetailsService, UserService
 		}
 
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthority());
+	}
+
+	public User getCurrentUser(Principal principal)
+	{
+		User currentUser = findUserByUsername(principal.getName());
+		return currentUser;
 	}
 }
