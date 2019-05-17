@@ -3,9 +3,6 @@ package javatodos.todos.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "todos")
@@ -20,6 +17,8 @@ public class ToDo extends Auditable
 
 	private boolean completed = false;
 
+	private String dateCreated;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userid")
 	@JsonIgnoreProperties("todos")
@@ -29,9 +28,11 @@ public class ToDo extends Auditable
 	{
 	}
 
-	public ToDo(String description)
+	public ToDo(String description, String dateCreated, User user)
 	{
 		this.description = description;
+		this.dateCreated = dateCreated;
+		this.user = user;
 	}
 
 	public long getTodoid()
