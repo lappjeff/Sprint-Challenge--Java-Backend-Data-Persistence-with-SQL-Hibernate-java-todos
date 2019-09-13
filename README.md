@@ -24,7 +24,6 @@ This is a basic todo database scheme with users and a todo list.
 
 Create a REST api service to store and read data from H2 database. 
 * seeddata.java is a sample script that can be modified to populate the database 
-* note that all new todos default to completed = false;
 
 The table layouts are as follows:
 
@@ -33,8 +32,8 @@ The table layouts are as follows:
 * TODO
   * todoid primary key, not null long
   * description string, not null
-  * datestarted datetime
-  * completed boolean
+  * datestarted datetime // adding this is now a stretch goal
+  * completed boolean (0 = false 1 = true)/ / adding this is now a stretch goal
   * userid foreign key (one user to many todos) not null 
 
 * USERS
@@ -58,8 +57,6 @@ Expose the following end points
 * POST /users/todo/{userid} - adds a todo to the assigned user. Can be done by any user.
 * PUT /todos/todoid/{todoid} - updates a todo based on todoid. Can be done by any user.
 * DELETE /users/userid/{userid} - Deletes a user based off of their userid and deletes all their associated todos. Can only be done by an admin.
-
-hint - think about taking the project https://github.com/LambdaSchool/java-oauth2.git and modifying it to fit this application…
 
 Stretch goals
 
